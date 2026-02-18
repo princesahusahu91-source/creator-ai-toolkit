@@ -1,0 +1,11 @@
+document.getElementById("waitlistForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  if (!email) return;
+
+  // For MVP: just show success
+  document.getElementById("successMsg").classList.remove("hidden");
+  document.getElementById("email").value = "";
+
+  // Later we’ll connect this to backend / Google Sheet / Firebase
+});
