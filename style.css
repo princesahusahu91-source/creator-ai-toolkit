@@ -31,7 +31,7 @@ body {
 }
 
 .logo {
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.3px;
 }
 
@@ -130,6 +130,37 @@ body {
   font-weight: 600;
 }
 
+.tool {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 30px 0;
+}
+
+.tool-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.tool-box input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.output {
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 90px;
+  white-space: pre-wrap;
+  font-weight: 500;
+}
+
 .waitlist {
   background: #fff;
   border: 1px solid var(--border);
@@ -153,8 +184,8 @@ body {
 
 .success {
   margin-top: 12px;
-  color: green;
-  font-weight: 600;
+  color: #16a34a;
+  font-weight: 700;
 }
 
 .hidden {
@@ -166,4 +197,18 @@ body {
   color: var(--muted);
   font-size: 0.9rem;
   padding: 20px 0 40px;
+}
+
+@media (max-width: 640px) {
+  .tool-box {
+    grid-template-columns: 1fr;
+  }
+  .waitlist input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  .waitlist button {
+    width: 100%;
+    margin-left: 0;
+  }
 }
