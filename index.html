@@ -130,19 +130,11 @@
     </header>
 
     <div class="card">
-      <div class="tools">
-        <div class="tool active" data-type="hooks">🎯 Reel Hooks</div>
-        <div class="tool" data-type="captions">✍️ Captions</div>
-        <div class="tool" data-type="scripts">🎬 Short Scripts</div>
-      </div>
-
-      <textarea id="prompt" placeholder="Describe your topic or niche... (e.g., 'Study motivation for SSC aspirants')"></textarea>
-
+      <!-- Your requested input + button wiring -->
+      <input id="prompt" placeholder="Type your prompt..." style="width:100%; padding:12px; border-radius:10px; border:1px solid #e5e7eb;" />
       <div class="actions">
         <button onclick="generateAI()">Generate</button>
-        <button class="secondary" onclick="clearOutput()">Clear</button>
       </div>
-
       <pre id="output">Your result will appear here...</pre>
     </div>
 
@@ -151,18 +143,9 @@
     </footer>
   </div>
 
+  <!-- Your exact script, unchanged -->
   <script>
-    const API_URL = "https://soft-fire-d050creator-ai-proxy.princesahu-sahu-91.workers.dev";
-
-    let currentTool = "hooks";
-
-    document.querySelectorAll(".tool").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentTool = btn.dataset.type;
-      });
-    });
+    const API_URL = "https://soft-fire-d050creator-ai-proxy.princesahu-sahu-91.workers.dev/v1/chat/completions";
 
     async function generateAI() {
       const userPrompt = document.getElementById("prompt").value;
@@ -175,19 +158,14 @@
 
       output.innerText = "Generating... ⏳";
 
-      const systemPromptMap = {
-        hooks: "Generate 10 short viral hooks for social media reels.",
-        captions: "Generate 10 engaging social media captions with emojis and hashtags.",
-        scripts: "Write a 30-45 second short-form video script."
-      };
-
       try {
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            model: "gpt-4.1-mini",
             messages: [
-              { role: "system", content: systemPromptMap[currentTool] },
+              { role: "system", content: "You are a helpful assistant for content creators." },
               { role: "user", content: userPrompt }
             ]
           })
@@ -196,21 +174,16 @@
         const data = await res.json();
 
         if (data.error) {
-          output.innerText = "Error: " + (data.error.message || "Unknown error");
+          output.innerText = "Error: " + data.error.message;
           return;
         }
 
-        output.innerText = data.choices?.[0]?.message?.content || "No response. Check backend.";
+        output.innerText = data.choices[0].message.content;
 
       } catch (err) {
         output.innerText = "Something went wrong. Check console.";
         console.error(err);
       }
-    }
-
-    function clearOutput() {
-      document.getElementById("prompt").value = "";
-      document.getElementById("output").innerText = "Your result will appear here...";
     }
   </script>
 </body>
