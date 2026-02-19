@@ -3,77 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Creator AI Toolkit — Grow Faster, Post Smarter</title>
-  <meta name="description" content="All-in-one AI toolkit for creators: viral hooks, captions, repurposing, and 7-day content planner. Save hours every week." />
-  <link rel="stylesheet" href="styles.css"/>
+  <title>Creator AI Toolkit</title>
+  <meta name="description" content="All-in-one AI toolkit for creators: hooks, captions, scripts & more."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --brand: #2563eb;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 28px; margin: 0; }
+    p { color: var(--muted); margin: 0; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tool {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+      cursor: pointer;
+      transition: 0.15s ease;
+      font-weight: 600;
+    }
+    .tool.active {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      color: #1d4ed8;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      background: var(--brand);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #0f172a;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #0b1220;
+      color: #e5e7eb;
+      padding: 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      min-height: 80px;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (min-width: 768px) {
+      .tools {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="nav">
-    <div class="logo">Creator AI Toolkit</div>
-    <a href="#waitlist" class="btn ghost">Join Waitlist</a>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Creator AI Toolkit</h1>
+      <p>Hooks, captions, scripts & ideas — all in one place.</p>
+    </header>
 
-  <main class="container">
-    <section class="hero">
-      <h1>One Toolkit. <span>10x Faster Content.</span></h1>
-      <p>Stop wasting hours on hooks, captions, and planning.  
-      Generate viral ideas, captions, and a 7-day plan in seconds.</p>
-
-      <div class="cta">
-        <a href="#tool" class="btn primary">Try Hook Generator (Free)</a>
-        <p class="sub">⚡ Built for Reels, Shorts & Posts</p>
+    <div class="card">
+      <div class="tools">
+        <div class="tool active" data-type="hooks">🎯 Reel Hooks</div>
+        <div class="tool" data-type="captions">✍️ Captions</div>
+        <div class="tool" data-type="scripts">🎬 Short Scripts</div>
       </div>
 
-      <div class="mock">
-        <div class="card">🔥 Viral Hook Generator</div>
-        <div class="card">✍️ Caption + CTA AI</div>
-        <div class="card">♻️ Repurpose Content</div>
-        <div class="card">📅 7-Day Planner</div>
-      </div>
-    </section>
+      <textarea id="prompt" placeholder="Describe your topic or niche... (e.g., 'Study motivation for SSC aspirants')"></textarea>
 
-    <!-- AI TOOL -->
-    <section id="tool" class="tool">
-      <h2>🔥 Viral Hook Generator (AI)</h2>
-      <p>Enter your niche and topic. Get scroll-stopping hooks for Reels/Shorts.</p>
-
-      <div class="tool-box">
-        <input id="niche" type="text" placeholder="Niche (e.g., fitness, finance)" />
-        <input id="topic" type="text" placeholder="Topic (e.g., fat loss, saving money)" />
-        <button class="btn primary" id="generateBtn">Generate Hooks</button>
+      <div class="actions">
+        <button onclick="generateAI()">Generate</button>
+        <button class="secondary" onclick="clearOutput()">Clear</button>
       </div>
 
-      <div id="output" class="output">Your hooks will appear here…</div>
-      <p class="sub">Free users: 3 generations/day • Pro: Unlimited</p>
-    </section>
+      <pre id="output">Your result will appear here...</pre>
+    </div>
 
-    <section class="benefits">
-      <h2>Why creators love this</h2>
-      <div class="grid">
-        <div class="box">⏱ Save 5–10 hours/week</div>
-        <div class="box">📈 Grow faster with better hooks</div>
-        <div class="box">🧠 Never run out of content ideas</div>
-        <div class="box">💸 Cheaper than multiple tools</div>
-      </div>
-    </section>
-
-    <section id="waitlist" class="waitlist">
-      <h2>Get Early Access</h2>
-      <p>Be the first to try Creator AI Toolkit. Early users get lifetime discounts.</p>
-
-      <form id="waitlistForm">
-        <input type="email" id="email" placeholder="Enter your email" required />
-        <button type="submit" class="btn primary">Join Waitlist</button>
-      </form>
-
-      <p id="successMsg" class="success hidden">✅ You’re on the list! We’ll notify you soon.</p>
-    </section>
-
-    <footer class="footer">
-      <p>© 2026 Creator AI Toolkit • Built for creators</p>
+    <footer>
+      © 2026 Creator AI Toolkit • Built with Cloudflare Workers
     </footer>
-  </main>
+  </div>
 
-  <script src="script.js"></script>
+  <script>
+    const API_URL = "https://soft-fire-d050creator-ai-proxy.princesahu-sahu-91.workers.dev";
+
+    let currentTool = "hooks";
+
+    document.querySelectorAll(".tool").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentTool = btn.dataset.type;
+      });
+    });
+
+    async function generateAI() {
+      const userPrompt = document.getElementById("prompt").value;
+      const output = document.getElementById("output");
+
+      if (!userPrompt.trim()) {
+        output.innerText = "Enter something first 🙂";
+        return;
+      }
+
+      output.innerText = "Generating... ⏳";
+
+      const systemPromptMap = {
+        hooks: "Generate 10 short viral hooks for social media reels.",
+        captions: "Generate 10 engaging social media captions with emojis and hashtags.",
+        scripts: "Write a 30-45 second short-form video script."
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: systemPromptMap[currentTool] },
+              { role: "user", content: userPrompt }
+            ]
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          output.innerText = "Error: " + (data.error.message || "Unknown error");
+          return;
+        }
+
+        output.innerText = data.choices?.[0]?.message?.content || "No response. Check backend.";
+
+      } catch (err) {
+        output.innerText = "Something went wrong. Check console.";
+        console.error(err);
+      }
+    }
+
+    function clearOutput() {
+      document.getElementById("prompt").value = "";
+      document.getElementById("output").innerText = "Your result will appear here...";
+    }
+  </script>
 </body>
 </html>
