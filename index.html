@@ -1,30 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- head stays SAME as your file -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Creator Control Panel</title>
+  <meta name="description" content="All-in-one creator tools: link-in-bio, digital products, WhatsApp auto-reply, email broadcast & analytics."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f6f9ff;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --brand: #3b82f6;
+      --brand-soft: #eef4ff;
+      --border: #e6ebf5;
+      --shadow: 0 10px 30px rgba(59,130,246,0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -200px, #eaf1ff 0%, transparent 60%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 22px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+    h1 { font-size: 22px; margin: 0; }
+    .badge { background: linear-gradient(135deg, #e0e7ff, #eef4ff); color: #1d4ed8; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1px solid #dbe3ff; }
+    .hint { margin-bottom: 18px; color: var(--muted); font-size: 13px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(59,130,246,.18); }
+    .icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: var(--brand-soft); color: #1d4ed8; margin-bottom: 10px; }
+    .card h3 { margin: 0 0 6px; font-size: 16px; }
+    .card p { margin: 0; font-size: 13px; color: var(--muted); }
+    footer { margin-top: 28px; text-align: center; font-size: 12px; color: var(--muted); }
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- UI stays SAME as your file -->
+    <header>
+      <h1>Creator Control Panel</h1>
+      <span class="badge">Phase 1 • MVP</span>
+    </header>
 
+    <p class="hint">Build your creator business — tools to sell, automate & grow.</p>
+
+    <div class="grid">
+      <div class="card" onclick="openTool('linkbio')">
+        <div class="icon">🔗</div>
+        <h3>Link-in-Bio Store</h3>
+        <p>Create a Stan-style bio page.</p>
+      </div>
+
+      <div class="card" onclick="openTool('digital')">
+        <div class="icon">📦</div>
+        <h3>Digital Product Seller</h3>
+        <p>Sell PDFs, files, access.</p>
+      </div>
+
+      <div class="card" onclick="openTool('analytics')">
+        <div class="icon">📊</div>
+        <h3>Basic Analytics</h3>
+        <p>Track clicks & performance.</p>
+      </div>
+    </div>
+
+    <footer>© 2026 Creator Control Panel</footer>
   </div>
 
   <script>
     function openTool(tool) {
       const routes = {
-        linkbio: "linkbio.html",     // your public bio page
-        digital: "products.html",   // digital product seller (we will create)
-        whatsapp: "whatsapp.html",  // next phase
-        email: "email.html",        // next phase
-        analytics: "analytics.html",
-        ai: "ai.html"               // your creator ai toolkit (optional)
+        linkbio: "linkbio.html",
+        digital: "products.html",
+        analytics: "analytics.html"
       };
-
-      if (!routes[tool]) {
-        alert("This module is coming soon 🚧");
-        return;
-      }
-
       window.location.href = routes[tool];
     }
   </script>
