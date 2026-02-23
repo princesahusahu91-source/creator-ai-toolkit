@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Store Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f6f9ff;--card:#fff;--text:#0f172a;--muted:#6b7280;--brand:#3b82f6;--border:#e6ebf5;--shadow:0 10px 30px rgba(59,130,246,.12)}
+    body{margin:0;font-family:Inter,system-ui;background:var(--bg);color:var(--text)}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1{margin:0 0 10px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .row{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:768px){.row{grid-template-columns:2fr 1fr 3fr 1fr}}
+    input{padding:12px;border:1px solid var(--border);border-radius:10px}
+    button{background:var(--brand);color:#fff;border:0;padding:12px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    .list{margin-top:12px}
+    .item{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
+    .danger{background:#ef4444}
+    .link{font-size:13px;color:#2563eb}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Digital Product Store – Admin</h1>
+    <a class="link" href="store-public.html" target="_blank">Open Store →</a>
+
+    <div class="card">
+      <div class="row">
+        <input id="title" placeholder="Product title (e.g. Resume PDF)" />
+        <input id="price" placeholder="Price (e.g. 49)" />
+        <input id="file" placeholder="File link (Google Drive / Dropbox)" />
+        <button onclick="addProduct()">Add</button>
+      </div>
+
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = "creator_store_products";
+
+    function getItems() {
+      return JSON.parse(localStorage.getItem(KEY) || "[]");
+    }
+
+    function saveItems(items) {
+      localStorage.setItem(KEY, JSON.stringify(items));
+      render();
+    }
+
+    function addProduct() {
+      const title = document.getElementById("title").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const file = document.getElementById("file").value.trim();
+      if (!title || !price || !file) return alert("Fill all fields");
+      const items = getItems();
+      items.push({ title, price, file });
+      saveItems(items);
+      document.getElementById("title").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("file").value = "";
+    }
+
+    function removeItem(i) {
+      const items = getItems();
+      items.splice(i, 1);
+      saveItems(items);
+    }
+
+    function render() {
+      const list = document.getElementById("list");
+      const items = getItems();
+      list.innerHTML = items.map((it, i) => `
+        <div class="item">
+          <div>
+            <strong>${it.title}</strong> – ₹${it.price}<br/>
+            <small>${it.file}</small>
+          </div>
+          <button class="danger" onclick="removeItem(${i})">Delete</button>
+        </div>
+      `).join("");
+    }
+
+    render();
+  </script>
+</body>
+  </html>
