@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Link-in-Bio • Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f6f9ff; --card:#fff; --text:#0f172a; --muted:#6b7280;
+      --brand:#3b82f6; --soft:#eef4ff; --border:#e6ebf5;
+      --shadow:0 10px 30px rgba(59,130,246,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1{margin:0 0 8px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .row{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
+    @media(min-width:768px){.row{grid-template-columns:2fr 2fr 1fr}}
+    input,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;font-family:inherit}
+    button{background:var(--brand);color:#fff;border:0;padding:12px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    .list{margin-top:14px}
+    .item{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
+    .item span{color:var(--muted);font-size:13px}
+    .danger{background:#ef4444}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .link{font-size:13px;color:#2563eb}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <h1>Link-in-Bio Admin</h1>
+      <a class="link" href="linkbio-public.html" target="_blank">Open Public Page →</a>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <input id="title" placeholder="Button title (e.g. Free PDF, My YouTube)" />
+        <input id="url" placeholder="Link (https://...)" />
+        <button onclick="addLink()">Add</button>
+      </div>
+
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = "creator_linkbio_items";
+
+    function getItems() {
+      return JSON.parse(localStorage.getItem(KEY) || "[]");
+    }
+
+    function saveItems(items) {
+      localStorage.setItem(KEY, JSON.stringify(items));
+      render();
+    }
+
+    function addLink() {
+      const title = document.getElementById("title").value.trim();
+      const url = document.getElementById("url").value.trim();
+      if (!title || !url) return alert("Add title and link");
+      const items = getItems();
+      items.push({ title, url });
+      saveItems(items);
+      document.getElementById("title").value = "";
+      document.getElementById("url").value = "";
+    }
+
+    function removeLink(i) {
+      const items = getItems();
+      items.splice(i, 1);
+      saveItems(items);
+    }
+
+    function render() {
+      const list = document.getElementById("list");
+      const items = getItems();
+      list.innerHTML = items.map((it, i) => `
+        <div class="item">
+          <div>
+            <strong>${it.title}</strong><br/>
+            <span>${it.url}</span>
+          </div>
+          <button class="danger" onclick="removeLink(${i})">Delete</button>
+        </div>
+      `).join("");
+    }
+
+    render();
+  </script>
+</body>
+  </html>
