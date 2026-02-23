@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Links</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f6f9ff; --card:#fff; --text:#0f172a; --muted:#6b7280;
+      --brand:#3b82f6; --soft:#eef4ff; --border:#e6ebf5;
+      --shadow:0 10px 30px rgba(59,130,246,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#eef4ff,#f6f9ff);color:var(--text)}
+    .wrap{max-width:520px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+    .profile{text-align:center;margin-bottom:10px}
+    .avatar{width:72px;height:72px;border-radius:50%;background:var(--soft);display:inline-grid;place-items:center;font-size:28px;margin:0 auto 8px}
+    h2{margin:6px 0 2px}
+    p{margin:0;color:var(--muted);font-size:13px}
+    .links{margin-top:12px;display:grid;gap:10px}
+    a.btn{display:block;text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:center;font-weight:600;color:#1d4ed8;box-shadow:0 6px 14px rgba(59,130,246,.1)}
+    a.btn:hover{background:#f1f5ff}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="profile">
+        <div class="avatar">👤</div>
+        <h2>Your Name</h2>
+        <p>Creator • Links & Resources</p>
+      </div>
+      <div class="links" id="links"></div>
+    </div>
+    <footer>Powered by Creator Control Panel</footer>
+  </div>
+
+  <script>
+    const KEY = "creator_linkbio_items";
+    const items = JSON.parse(localStorage.getItem(KEY) || "[]");
+    const links = document.getElementById("links");
+
+    links.innerHTML = items.length
+      ? items.map(it => `<a class="btn" href="${it.url}" target="_blank">${it.title}</a>`).join("")
+      : "<p style='text-align:center;color:#6b7280'>No links yet.</p>";
+  </script>
+</body>
+</html>
