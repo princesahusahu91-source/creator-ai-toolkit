@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Digital Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f6f9ff;--card:#fff;--text:#0f172a;--muted:#6b7280;--brand:#3b82f6;--border:#e6ebf5;--shadow:0 10px 30px rgba(59,130,246,.12)}
+    body{margin:0;font-family:Inter,system-ui;background:linear-gradient(180deg,#eef4ff,#f6f9ff);color:var(--text)}
+    .wrap{max-width:700px;margin:0 auto;padding:20px}
+    h1{text-align:center;margin-bottom:10px}
+    .grid{display:grid;gap:12px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+    .price{color:#2563eb;font-weight:700}
+    .btn{display:block;text-align:center;background:var(--brand);color:#fff;text-decoration:none;padding:10px;border-radius:10px;font-weight:600;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>My Digital Products</h1>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <script>
+    const KEY = "creator_store_products";
+    const items = JSON.parse(localStorage.getItem(KEY) || "[]");
+    const grid = document.getElementById("grid");
+
+    grid.innerHTML = items.length
+      ? items.map(it => `
+        <div class="card">
+          <h3>${it.title}</h3>
+          <div class="price">₹${it.price}</div>
+          <a class="btn" href="${it.file}" target="_blank">Buy Now</a>
+        </div>
+      `).join("")
+      : "<p style='text-align:center;color:#6b7280'>No products yet.</p>";
+  </script>
+</body>
+    </html>
