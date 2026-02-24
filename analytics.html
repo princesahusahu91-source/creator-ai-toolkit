@@ -1,97 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Analytics Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analytics</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background: #f6f9ff;
-      color: #0f172a;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 22px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .stat {
-      background: white;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(59,130,246,0.12);
-      border: 1px solid #e6ebf5;
-      text-align: center;
-    }
-    .stat h2 {
-      margin: 0;
-      font-size: 28px;
-      color: #2563eb;
-    }
-    .stat p {
-      margin: 6px 0 0;
-      color: #6b7280;
-      font-size: 13px;
-    }
-    button {
-      margin-top: 16px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    a { color: #2563eb; text-decoration: none; font-weight: 600; }
+    body{font-family:Inter,system-ui;background:#f6f9ff;margin:0}
+    .container{max-width:900px;margin:0 auto;padding:24px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:768px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .card{background:#fff;border:1px solid #e6ebf5;border-radius:14px;padding:16px}
+    .num{font-size:28px;font-weight:700;color:#2563eb}
+    .muted{color:#6b7280}
   </style>
 </head>
 <body>
   <div class="container">
-    <a href="index.html">← Back</a>
-    <h2>📊 Analytics Dashboard</h2>
-
+    <h1>📊 Analytics</h1>
     <div class="grid">
-      <div class="stat">
-        <h2 id="visits">0</h2>
-        <p>Total Visits</p>
+      <div class="card">
+        <div class="muted">Bio Page Views</div>
+        <div id="views" class="num">0</div>
       </div>
-      <div class="stat">
-        <h2 id="clicks">0</h2>
-        <p>Link Clicks</p>
+      <div class="card">
+        <div class="muted">Product Clicks</div>
+        <div id="clicks" class="num">0</div>
       </div>
-      <div class="stat">
-        <h2 id="sales">0</h2>
-        <p>Products Sold</p>
+      <div class="card">
+        <div class="muted">Conversions</div>
+        <div id="conversions" class="num">0</div>
       </div>
     </div>
-
-    <button onclick="resetStats()">Reset Data</button>
   </div>
 
   <script>
-    function loadStats() {
-      document.getElementById("visits").innerText = localStorage.getItem("visits") || 0;
-      document.getElementById("clicks").innerText = localStorage.getItem("clicks") || 0;
-      document.getElementById("sales").innerText = localStorage.getItem("sales") || 0;
-    }
+    function get(key){ return Number(localStorage.getItem(key) || 0); }
 
-    function resetStats() {
-      localStorage.setItem("visits", 0);
-      localStorage.setItem("clicks", 0);
-      localStorage.setItem("sales", 0);
-      loadStats();
-      alert("Analytics reset!");
-    }
-
-    loadStats();
+    document.getElementById("views").innerText = get("bio_views");
+    document.getElementById("clicks").innerText = get("product_clicks");
+    document.getElementById("conversions").innerText = get("conversions");
   </script>
 </body>
 </html>
