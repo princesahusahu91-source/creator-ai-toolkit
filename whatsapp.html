@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WhatsApp Auto-Reply / Auto Delivery</title>
+  <style>
+    body {
+      margin:0;
+      font-family: Inter, system-ui, sans-serif;
+      background:#f6f9ff;
+      padding:20px;
+    }
+    .box {
+      max-width:520px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:16px;
+      padding:20px;
+      border:1px solid #e5e7eb;
+      box-shadow:0 10px 25px rgba(59,130,246,.12);
+    }
+    h1 { margin:0 0 8px; }
+    p { color:#6b7280; font-size:14px; }
+
+    label {
+      font-size:13px;
+      font-weight:600;
+      display:block;
+      margin-top:12px;
+    }
+    input, textarea {
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      outline:none;
+      margin-top:6px;
+      font-size:14px;
+    }
+    button {
+      margin-top:14px;
+      width:100%;
+      padding:12px;
+      border-radius:12px;
+      border:none;
+      background:#2563eb;
+      color:white;
+      font-weight:600;
+      font-size:15px;
+      cursor:pointer;
+    }
+    .preview {
+      margin-top:16px;
+      padding:12px;
+      border-radius:10px;
+      background:#eef4ff;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>💬 WhatsApp Auto-Reply</h1>
+    <p>Create auto WhatsApp message for your users</p>
+
+    <label>Your WhatsApp Number (with country code)</label>
+    <input id="waNumber" placeholder="919876543210"/>
+
+    <label>Auto Message</label>
+    <textarea id="waMsg" rows="4" placeholder="Hi, I want to buy your product..."></textarea>
+
+    <button onclick="saveAndGenerate()">Save & Generate Link</button>
+
+    <div class="preview" id="preview" style="display:none;"></div>
+
+    <button id="openBtn" style="display:none;" onclick="openWhatsApp()">Open WhatsApp Link</button>
+  </div>
+
+  <script>
+    function saveAndGenerate(){
+      const num = document.getElementById("waNumber").value.trim();
+      const msg = document.getElementById("waMsg").value.trim();
+
+      if(!num || !msg){
+        alert("Fill number and message");
+        return;
+      }
+
+      localStorage.setItem("wa_number", num);
+      localStorage.setItem("wa_msg", msg);
+
+      const link = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+
+      document.getElementById("preview").style.display = "block";
+      document.getElementById("preview").innerHTML =
+        "<b>Your Auto-Reply Link:</b><br>" + link;
+
+      document.getElementById("openBtn").style.display = "block";
+    }
+
+    function openWhatsApp(){
+      // Analytics tracking
+      localStorage.setItem(
+        "whatsapp_clicks",
+        Number(localStorage.getItem("whatsapp_clicks") || 0) + 1
+      );
+
+      const num = localStorage.getItem("wa_number");
+      const msg = localStorage.getItem("wa_msg");
+
+      const link = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+      window.open(link, "_blank");
+    }
+  </script>
+
+</body>
+  </html>
