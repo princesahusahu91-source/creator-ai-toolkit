@@ -29,7 +29,9 @@
     function inc(key){
       const v = Number(localStorage.getItem(key) || 0) + 1;
       localStorage.setItem(key, v);
+      console.log("inc", key, v);
     }
+
     // Count bio page view
     inc("bio_views");
 
