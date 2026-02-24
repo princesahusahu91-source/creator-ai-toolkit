@@ -25,7 +25,8 @@
     function buy(){
       const v = Number(localStorage.getItem("conversions") || 0) + 1;
       localStorage.setItem("conversions", v);
-      alert("Order received! (Demo)\nYou can connect payment later.");
+      console.log("conversion", v);
+      alert("Order received! (Demo)");
     }
   </script>
 </body>
