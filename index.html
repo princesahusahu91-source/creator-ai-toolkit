@@ -1,104 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Creator Store</title>
+  <title>Creator Control Panel</title>
+  <meta name="description" content="All-in-one creator tools: link-in-bio, digital products, WhatsApp auto-reply, email broadcast & analytics."/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root{
-      --bg:#f6f9ff;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --brand:#3b82f6;
-      --border:#e6ebf5;
-      --shadow:0 14px 40px rgba(59,130,246,.18);
-      --radius:18px;
+    :root {
+      --bg: #f6f9ff;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --brand: #3b82f6;       /* premium blue */
+      --brand-soft: #eef4ff; /* soft blue bg */
+      --border: #e6ebf5;
+      --shadow: 0 10px 30px rgba(59,130,246,0.12);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Inter,system-ui;
-      background:linear-gradient(180deg,#eef4ff,#f6f9ff);
-      color:var(--text);
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -200px, #eaf1ff 0%, transparent 60%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
-    .wrap{max-width:420px;margin:0 auto;padding:20px}
-    .profile{
-      text-align:center;margin-top:10px;margin-bottom:16px
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px;
     }
-    .avatar{
-      width:84px;height:84px;border-radius:50%;
-      background:#e0e7ff;margin:0 auto 10px;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;color:#3b82f6;font-size:28px;
-      box-shadow:var(--shadow)
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
     }
-    h1{font-size:22px;margin:6px 0}
-    p{color:var(--muted);font-size:14px;margin:0}
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:14px;
-      margin-bottom:12px;
+
+    h1 {
+      font-size: 22px;
+      margin: 0;
+      letter-spacing: -0.2px;
     }
-    .link{
-      display:flex;align-items:center;justify-content:space-between;
-      text-decoration:none;color:var(--text);
-      padding:14px;border-radius:14px;
-      border:1px solid var(--border);
-      margin-bottom:10px;
-      background:#fff;
-      transition:.15s;
-      font-weight:600;
+
+    .badge {
+      background: linear-gradient(135deg, #e0e7ff, #eef4ff);
+      color: #1d4ed8;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #dbe3ff;
     }
-    .link:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(59,130,246,.18)}
-    .tag{font-size:12px;color:#2563eb;background:#eef2ff;padding:4px 8px;border-radius:999px}
-    footer{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}
+
+    .hint {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 20px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(400px 120px at -10% -20%, rgba(59,130,246,0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(59,130,246,0.18);
+      border-color: #c7d2fe;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      background: var(--brand-soft);
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      letter-spacing: -0.1px;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #eef2ff;
+      color: #1d4ed8;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #dde3ff;
+    }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="profile">
-      <div class="avatar">PS</div>
-      <h1>Prince Sahu</h1>
-      <p>All my tools & digital products</p>
+  <div class="container">
+    <header>
+      <h1>Creator Control Panel</h1>
+      <span class="badge">Phase 1 • MVP</span>
+    </header>
+
+    <p class="hint">Build your creator business — tools to sell, automate & grow.</p>
+
+    <div class="grid">
+      <div class="card" onclick="openTool('linkbio')">
+        <span class="tag">Popular</span>
+        <div class="icon">🔗</div>
+        <h3>Link-in-Bio Store</h3>
+        <p>Create a Stan-style bio page to sell links, products & services.</p>
+      </div>
+
+      <div class="card" onclick="openTool('digital')">
+        <span class="tag">Revenue</span>
+        <div class="icon">📦</div>
+        <h3>Digital Product Seller</h3>
+        <p>Sell PDFs, files, courses or private access.</p>
+      </div>
+
+      <div class="card" onclick="openTool('whatsapp')">
+        <div class="icon">💬</div>
+        <h3>WhatsApp Auto-Reply</h3>
+        <p>Auto-send replies or content to users.</p>
+      </div>
+
+      <div class="card" onclick="openTool('email')">
+        <div class="icon">📧</div>
+        <h3>Email Broadcast Tool</h3>
+        <p>Collect emails & send broadcasts.</p>
+      </div>
+
+      <div class="card" onclick="openTool('analytics')">
+        <div class="icon">📊</div>
+        <h3>Basic Analytics</h3>
+        <p>Track clicks, views & conversions.</p>
+      </div>
+
+      <div class="card" onclick="openTool('ai')">
+        <span class="tag">AI</span>
+        <div class="icon">🤖</div>
+        <h3>AI Content Tools</h3>
+        <p>Hooks, captions, scripts & ideas.</p>
+      </div>
     </div>
 
-    <div class="card" id="links"></div>
-
-    <footer>Powered by Creator Toolkit</footer>
+    <footer>
+      © 2026 Creator Control Panel • Zero-Cost MVP
+    </footer>
   </div>
 
   <script>
-    const LINKS_KEY = "stan_links";
-
-    function getLinks(){
-      return JSON.parse(localStorage.getItem(LINKS_KEY) || "[]");
+    function openTool(tool) {
+      alert("Next Phase: " + tool + " module UI will open here.\n\nPhase 1 = UI foundation only.");
     }
-
-    function render(){
-      const links = getLinks();
-      const box = document.getElementById("links");
-      box.innerHTML = links.length
-        ? links.map(l => `
-          <a class="link" href="${l.url}" target="_blank" onclick="track('${l.title}')">
-            <span>${l.title}</span>
-            <span class="tag">${l.tag || "Open"}</span>
-          </a>
-        `).join("")
-        : "<p style='text-align:center;color:#64748b'>No links added yet.</p>";
-    }
-
-    function track(title){
-      const stats = JSON.parse(localStorage.getItem("stan_analytics") || "{}");
-      stats[title] = (stats[title] || 0) + 1;
-      localStorage.setItem("stan_analytics", JSON.stringify(stats));
-    }
-
-    render();
   </script>
 </body>
 </html>
