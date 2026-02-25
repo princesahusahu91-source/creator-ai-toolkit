@@ -9,7 +9,7 @@
     body{font-family:Inter,system-ui;background:#f6f9ff;margin:0}
     .container{max-width:900px;margin:0 auto;padding:24px}
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr)}}
+    @media(min-width:768px){.grid{grid-template-columns:repeat(5,1fr)}}
     .card{background:#fff;border:1px solid #e6ebf5;border-radius:14px;padding:16px}
     .num{font-size:28px;font-weight:700;color:#2563eb}
     .muted{color:#6b7280;font-size:13px}
@@ -48,6 +48,11 @@
         <div class="muted">WhatsApp Clicks</div>
         <div id="wa" class="num">0</div>
       </div>
+
+      <div class="card">
+        <div class="muted">Email Subscribers</div>
+        <div id="emails" class="num">0</div>
+      </div>
     </div>
 
     <button class="btn" onclick="resetStats()">Reset Analytics</button>
@@ -62,6 +67,7 @@
     document.getElementById("clicks").innerText = get("product_clicks");
     document.getElementById("conversions").innerText = get("conversions");
     document.getElementById("wa").innerText = get("whatsapp_clicks");
+    document.getElementById("emails").innerText = get("email_subscribers");
 
     function resetStats(){
       if(confirm("Reset all analytics?")){
@@ -69,6 +75,7 @@
         localStorage.removeItem("product_clicks");
         localStorage.removeItem("conversions");
         localStorage.removeItem("whatsapp_clicks");
+        localStorage.removeItem("email_subscribers");
         location.reload();
       }
     }
