@@ -111,6 +111,14 @@
         <p>Track clicks, views & conversions.</p>
       </div>
 
+      <!-- 🔥 NEW TOOL ADDED -->
+      <div class="card" onclick="openTool('instagram')">
+        <span class="tag">Hot</span>
+        <div class="icon">📩</div>
+        <h3>Instagram Auto DM</h3>
+        <p>Auto-reply to comments with DMs.</p>
+      </div>
+
       <div class="card" onclick="openTool('ai')">
         <span class="tag">AI</span>
         <div class="icon">🤖</div>
@@ -125,10 +133,6 @@
   </div>
 
   <script>
-    function inc(key){
-      localStorage.setItem(key, Number(localStorage.getItem(key) || 0) + 1);
-    }
-
     function openTool(tool) {
       const routes = {
         linkbio: "linkbio.html",
@@ -136,17 +140,13 @@
         analytics: "analytics.html",
         whatsapp: "whatsapp.html",
         email: "email.html",
-        ai: "ai.html"
+        ai: "ai.html",
+        instagram: "instagram.html"   // ✅ ADDED
       };
-
-      // track dashboard clicks (optional)
-      inc("dashboard_clicks");
-
       if (!routes[tool]) {
         alert("Coming soon 🚧");
         return;
       }
-
       window.location.href = routes[tool];
     }
   </script>
