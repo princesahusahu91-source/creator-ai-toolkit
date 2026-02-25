@@ -5,92 +5,136 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Instagram Auto DM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     body{font-family:Inter,system-ui;background:#f6f9ff;margin:0}
-    .container{max-width:900px;margin:0 auto;padding:24px}
-    .card{background:#fff;border:1px solid #e6ebf5;border-radius:14px;padding:18px;margin-bottom:12px}
-    h1{margin:0 0 12px}
-    input,textarea{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid #e6ebf5;
-      margin-top:6px;
-      font-family:inherit;
+    .container{max-width:900px;margin:0 auto;padding:22px}
+    h1{margin:0 0 6px}
+    .muted{color:#6b7280;font-size:13px}
+    .card{background:#fff;border:1px solid #e6ebf5;border-radius:14px;padding:16px;margin-top:14px}
+    label{font-weight:600;font-size:13px}
+    input, textarea{
+      width:100%; padding:10px; border-radius:10px;
+      border:1px solid #e6ebf5; outline:none; margin-top:6px;
+      font-family:Inter,system-ui;
     }
-    button{
-      margin-top:10px;
-      padding:10px 14px;
-      border-radius:10px;
-      border:none;
-      background:#2563eb;
-      color:#fff;
-      font-weight:600;
+    textarea{min-height:90px; resize:vertical}
+    .btn{
+      margin-top:12px; padding:10px 14px; border-radius:10px;
+      border:none; background:#2563eb; color:#fff; font-weight:600;
       cursor:pointer;
     }
-    .muted{color:#6b7280;font-size:13px}
-    .success{color:#16a34a;font-weight:600}
-    .fakebox{
-      background:#f1f5ff;
-      border:1px dashed #c7d2fe;
-      padding:12px;
-      border-radius:10px;
-      margin-top:12px;
+    .btn.secondary{background:#e5edff;color:#1d4ed8}
+    .row{display:grid; gap:12px}
+    @media(min-width:768px){.row{grid-template-columns:1fr 1fr}}
+    .log{font-size:13px; color:#334155; margin-top:8px}
+    .pill{
+      display:inline-block; padding:4px 10px; border-radius:999px;
+      background:#eef2ff; color:#1d4ed8; font-size:12px; font-weight:600; margin-right:6px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>📩 Instagram Auto DM (MVP)</h1>
-    <p class="muted">Auto-send DM when user comments a keyword (Demo Version)</p>
+    <p class="muted">Auto-reply to comments with DMs (simulated). Real automation needs Instagram API / webhook.</p>
 
     <div class="card">
-      <label>Trigger Keyword (e.g. LINK, PDF, NOTES)</label>
-      <input id="keyword" placeholder="LINK" />
+      <label>Trigger Keywords (comma separated)</label>
+      <input id="keywords" placeholder="price, ebook, link" />
 
-      <label>DM Message</label>
-      <textarea id="message" placeholder="Hey! Here's your free PDF 👉 https://yourlink.com"></textarea>
+      <label style="margin-top:10px;">Auto DM Message</label>
+      <textarea id="message" placeholder="Hey! Thanks for commenting 😊 Here’s the link: https://..."></textarea>
 
-      <button onclick="saveSettings()">Save Auto-DM</button>
-      <p id="status" class="success"></p>
-    </div>
-
-    <div class="card fakebox">
-      <b>🔌 Instagram Connection Status:</b>
-      <p>Connected (Demo Mode)</p>
-      <p class="muted">Real automation requires backend + official API.</p>
+      <button class="btn" onclick="saveConfig()">Save Settings</button>
     </div>
 
     <div class="card">
-      <h3>📊 Test DM Simulation</h3>
-      <input id="testComment" placeholder="Type a comment like: LINK" />
-      <button onclick="simulateDM()">Simulate DM</button>
-      <pre id="dmOutput"></pre>
+      <h3>🧪 Test Automation (Simulate Comment)</h3>
+      <div class="row">
+        <input id="comment" placeholder="User comment e.g. 'price pls'" />
+        <input id="username" placeholder="Username e.g. @rahul" />
+      </div>
+      <button class="btn secondary" onclick="simulate()">Simulate DM</button>
+      <div id="result" class="log"></div>
+    </div>
+
+    <div class="card">
+      <h3>📥 Leads Collected</h3>
+      <div id="leads" class="log"></div>
     </div>
   </div>
 
   <script>
-    function saveSettings(){
-      localStorage.setItem("ig_keyword", document.getElementById("keyword").value);
-      localStorage.setItem("ig_message", document.getElementById("message").value);
-      document.getElementById("status").innerText = "Auto-DM saved successfully ✅";
+    const K = {
+      keys: "ig_keywords",
+      msg: "ig_message",
+      leads: "ig_leads",
+      clicks: "instagram_clicks"
+    };
+
+    function saveConfig(){
+      localStorage.setItem(K.keys, document.getElementById("keywords").value);
+      localStorage.setItem(K.msg, document.getElementById("message").value);
+      alert("Saved ✅");
     }
 
-    function simulateDM(){
-      const keyword = localStorage.getItem("ig_keyword") || "";
-      const msg = localStorage.getItem("ig_message") || "";
-      const comment = document.getElementById("testComment").value;
+    function getArr(key){
+      return (localStorage.getItem(key) || "").toLowerCase().split(",").map(x=>x.trim()).filter(Boolean);
+    }
 
-      if(comment.toLowerCase().includes(keyword.toLowerCase())){
-        document.getElementById("dmOutput").innerText = "📩 DM Sent:\n\n" + msg;
+    function inc(key){
+      const v = Number(localStorage.getItem(key) || 0) + 1;
+      localStorage.setItem(key, v);
+    }
 
-        let wa = Number(localStorage.getItem("whatsapp_clicks") || 0);
-        localStorage.setItem("whatsapp_clicks", wa + 1);
+    function simulate(){
+      const comment = document.getElementById("comment").value.toLowerCase();
+      const user = document.getElementById("username").value || "@user";
+      const keys = getArr(K.keys);
+      const msg = localStorage.getItem(K.msg) || "";
 
-      } else {
-        document.getElementById("dmOutput").innerText = "❌ No keyword detected. DM not sent.";
+      if(!keys.length || !msg){
+        alert("Set keywords & message first");
+        return;
       }
+
+      const matched = keys.some(k => comment.includes(k));
+      if(!matched){
+        document.getElementById("result").innerHTML = "❌ No trigger matched. No DM sent.";
+        return;
+      }
+
+      // Save lead
+      const leads = JSON.parse(localStorage.getItem(K.leads) || "[]");
+      leads.push({ user, comment, time: new Date().toLocaleString() });
+      localStorage.setItem(K.leads, JSON.stringify(leads));
+
+      // Analytics
+      inc(K.clicks);
+
+      document.getElementById("result").innerHTML =
+        "✅ DM sent to <b>" + user + "</b><br><span class='pill'>Message:</span> " + msg;
+
+      renderLeads();
     }
+
+    function renderLeads(){
+      const leads = JSON.parse(localStorage.getItem(K.leads) || "[]");
+      if(!leads.length){
+        document.getElementById("leads").innerText = "No leads yet.";
+        return;
+      }
+      document.getElementById("leads").innerHTML = leads
+        .slice().reverse()
+        .map(l => "• " + l.user + " — " + l.comment + " <span class='muted'>(" + l.time + ")</span>")
+        .join("<br>");
+    }
+
+    // Load saved config
+    document.getElementById("keywords").value = localStorage.getItem(K.keys) || "";
+    document.getElementById("message").value = localStorage.getItem(K.msg) || "";
+    renderLeads();
   </script>
 </body>
 </html>
