@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Email List & Broadcast</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:Inter,system-ui;background:#f6f9ff;margin:0}
+    .container{max-width:900px;margin:0 auto;padding:24px}
+    h1{margin:0 0 6px}
+    .muted{color:#6b7280;font-size:13px;margin-bottom:16px}
+
+    .card{background:#fff;border:1px solid #e6ebf5;border-radius:14px;padding:16px;margin-bottom:16px}
+    label{font-size:13px;color:#6b7280}
+    input, textarea{
+      width:100%;padding:10px;border-radius:10px;border:1px solid #e6ebf5;
+      font-family:Inter;margin-top:6px;margin-bottom:12px;
+    }
+    button{
+      padding:10px 14px;border-radius:10px;border:none;
+      background:#2563eb;color:#fff;font-weight:600;cursor:pointer;
+    }
+    .list{margin-top:10px;font-size:14px}
+    .email-item{padding:6px 0;border-bottom:1px dashed #e6ebf5}
+    .count{font-weight:700;color:#2563eb}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📧 Email List & Broadcast</h1>
+    <p class="muted">Collect emails from your audience and send broadcast messages (demo mode).</p>
+
+    <!-- Collect Email -->
+    <div class="card">
+      <h3>➕ Add Subscriber</h3>
+      <input id="emailInput" type="email" placeholder="Enter email address" />
+      <button onclick="addEmail()">Add Email</button>
+      <p class="muted">Total Subscribers: <span id="count" class="count">0</span></p>
+    </div>
+
+    <!-- Broadcast -->
+    <div class="card">
+      <h3>📢 Broadcast Message</h3>
+      <textarea id="message" rows="4" placeholder="Write your broadcast message..."></textarea>
+      <button onclick="sendBroadcast()">Send to All (Demo)</button>
+      <p class="muted" id="status"></p>
+    </div>
+
+    <!-- List -->
+    <div class="card">
+      <h3>📜 Your Email List</h3>
+      <div id="list" class="list"></div>
+    </div>
+  </div>
+
+  <script>
+    function getList(){
+      return JSON.parse(localStorage.getItem("email_list") || "[]");
+    }
+
+    function saveList(list){
+      localStorage.setItem("email_list", JSON.stringify(list));
+      localStorage.setItem("email_subscribers", list.length);
+      render();
+    }
+
+    function addEmail(){
+      const input = document.getElementById("emailInput");
+      const email = input.value.trim().toLowerCase();
+
+      if(!email || !email.includes("@")){
+        alert("Enter valid email");
+        return;
+      }
+
+      let list = getList();
+      if(list.includes(email)){
+        alert("Email already added");
+        return;
+      }
+
+      list.push(email);
+      saveList(list);
+      input.value = "";
+    }
+
+    function sendBroadcast(){
+      const msg = document.getElementById("message").value.trim();
+      if(!msg){
+        alert("Write a message first");
+        return;
+      }
+
+      const list = getList();
+      document.getElementById("status").innerText =
+        "Broadcast sent to " + list.length + " subscribers (demo only).";
+
+      document.getElementById("message").value = "";
+    }
+
+    function render(){
+      const list = getList();
+      document.getElementById("count").innerText = list.length;
+
+      const listDiv = document.getElementById("list");
+      listDiv.innerHTML = list.map(e => `<div class="email-item">${e}</div>`).join("");
+    }
+
+    render();
+  </script>
+</body>
+</html>
