@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Content Tools</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;background:#f6f9ff;margin:0;padding:20px}
+.container{max-width:900px;margin:auto}
+h1{margin-bottom:10px}
+textarea{width:100%;min-height:120px;padding:12px;border-radius:10px;border:1px solid #ddd}
+button{padding:12px 16px;border:none;border-radius:10px;background:#3b82f6;color:#fff;font-weight:600;cursor:pointer}
+.result{margin-top:16px;padding:14px;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
+.back{margin-bottom:16px;display:inline-block;color:#3b82f6;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a class="back" href="index.html">← Back to Dashboard</a>
+
+  <h1>🤖 AI Content Generator</h1>
+  <p>Enter your topic and get captions, hooks, or ideas.</p>
+
+  <textarea id="prompt" placeholder="Example: Instagram reel about fitness motivation"></textarea>
+  <br><br>
+  <button onclick="generate()">Generate</button>
+
+  <div class="result" id="result">Your AI result will appear here...</div>
+</div>
+
+<script>
+function generate() {
+  const text = document.getElementById("prompt").value.trim();
+  if (!text) {
+    alert("Enter a topic first!");
+    return;
+  }
+
+  const outputs = [
+    "🔥 Hook: Stop scrolling if you want real results!",
+    "📌 Caption: Consistency beats motivation. Start today.",
+    "🎯 CTA: Follow for daily growth hacks.",
+    "🎬 Reel Script: Problem → Struggle → Solution → Call to Action"
+  ];
+
+  document.getElementById("result").innerText =
+    "AI Suggestions for: " + text + "\n\n" + outputs.join("\n");
+
+  // analytics count (keeps your analytics.html increasing)
+  localStorage.setItem("ai_uses", (Number(localStorage.getItem("ai_uses")) || 0) + 1);
+}
+</script>
+
+</body>
+</html>
