@@ -3,56 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Creator Control Panel</title>
-  <meta name="description" content="All-in-one creator tools: link-in-bio, digital products, WhatsApp auto-reply, email broadcast & analytics."/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <title>Creator AI Toolkit – Dashboard</title>
   <style>
-    :root {
-      --bg: #f6f9ff;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #6b7280;
-      --brand: #3b82f6;
-      --brand-soft: #eef4ff;
-      --border: #e6ebf5;
-      --shadow: 0 10px 30px rgba(59,130,246,0.12);
+    :root{
+      --bg:#f6f9ff;--card:#fff;--text:#0f172a;--muted:#6b7280;
+      --brand:#3b82f6;--border:#e6ebf5;--soft:#eef4ff
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background: radial-gradient(1200px 600px at 50% -200px, #eaf1ff 0%, transparent 60%), var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)
     }
-    .container { max-width: 1100px; margin: 0 auto; padding: 22px; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
-    h1 { font-size: 22px; margin: 0; letter-spacing: -0.2px; }
-    .badge {
-      background: linear-gradient(135deg, #e0e7ff, #eef4ff);
-      color: #1d4ed8; padding: 6px 12px; border-radius: 999px;
-      font-size: 12px; font-weight: 600; border: 1px solid #dbe3ff;
+    .container{max-width:1100px;margin:auto;padding:20px}
+    h1{margin:10px 0 20px}
+    .grid{
+      display:grid;gap:14px;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
     }
-    .hint { margin-bottom: 18px; color: var(--muted); font-size: 13px; }
-    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    .card {
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px 18px 20px;
-      box-shadow: var(--shadow);
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-      cursor: pointer; position: relative; overflow: hidden;
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:16px;padding:16px;cursor:pointer;
+      transition:.2s ease;position:relative
     }
-    .card::after {
-      content: ""; position: absolute; inset: 0;
-      background: radial-gradient(400px 120px at -10% -20%, rgba(59,130,246,0.08), transparent 60%);
-      pointer-events: none;
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.06)}
+    .icon{
+      width:40px;height:40px;border-radius:10px;
+      display:grid;place-items:center;
+      background:var(--soft);color:#1d4ed8;margin-bottom:8px;font-size:20px
     }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(59,130,246,0.18); border-color: #c7d2fe; }
-    .icon {
-      width: 42px; height: 42px; border-radius: 12px;
-      display: grid; place-items: center; font-size: 22px;
+    .tag{
+      position:absolute;top:10px;right:10px;
+      background:#ef4444;color:#fff;font-size:11px;
+      padding:3px 8px;border-radius:999px;font-weight:700
+    }
+    p{color:var(--muted);font-size:14px;margin:6px 0 0}
+    footer{text-align:center;color:var(--muted);font-size:12px;margin:30px 0 10px}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🚀 Creator AI Toolkit – Dashboard</h1>
+
+    <div class="grid">
+
+      <!-- Link in Bio -->
+      <div class="card" onclick="openTool('linkbio')">
+        <div class="icon">🔗</div>
+        <h3>Link-in-Bio Store</h3>
+        <p>Create a Stan-style bio page to sell links & products.</p>
+      </div>
+
+      <!-- Digital Products -->
+      <div class="card" onclick="openTool('products')">
+        <div class="icon">📦</div>
+        <h3>Digital Products</h3>
+        <p>Sell PDFs, videos, and files.</p>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="card" onclick="openTool('whatsapp')">
+        <div class="icon">💬</div>
+        <h3>WhatsApp Auto Reply</h3>
+        <p>Auto reply to WhatsApp DMs.</p>
+      </div>
+
+      <!-- Instagram -->
+      <div class="card" onclick="openTool('instagram')">
+        <span class="tag">Hot</span>
+        <div class="icon">📩</div>
+        <h3>Instagram Auto DM</h3>
+        <p>Auto-reply to comments with DMs.</p>
+      </div>
+
+      <!-- Email -->
+      <div class="card" onclick="openTool('email')">
+        <div class="icon">📧</div>
+        <h3>Email Broadcast</h3>
+        <p>Send emails to your list.</p>
+      </div>
+
+      <!-- AI -->
+      <div class="card" onclick="openTool('ai')">
+        <div class="icon">🤖</div>
+        <h3>AI Content Tools</h3>
+        <p>Generate captions, hooks & scripts.</p>
+      </div>
+
+      <!-- Analytics -->
+      <div class="card" onclick="openTool('analytics')">
+        <div class="icon">📊</div>
+        <h3>Analytics</h3>
+        <p>Track usage of your tools.</p>
+      </div>
+
+    </div>
+
+    <footer>© 2026 Creator AI Toolkit</footer>
+  </div>
+
+  <script>
+    function openTool(tool){
+      const routes = {
+        linkbio: "linkbio.html",
+        products: "products.html",
+        whatsapp: "whatsapp.html",
+        instagram: "instagram.html",
+        email: "email.html",
+        ai: "ai.html",
+        analytics: "analytics.html"
+      };
+
+      if(routes[tool]){
+        window.location.href = routes[tool];
+      } else {
+        alert("Tool page not found!");
+      }
+    }
+  </script>
+
+</body>
+</html>
