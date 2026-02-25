@@ -10,14 +10,17 @@ body{font-family:Inter,system-ui,sans-serif;background:#f6f9ff;margin:0;padding:
 h1{margin-bottom:10px}
 textarea{width:100%;min-height:120px;padding:12px;border-radius:10px;border:1px solid #ddd}
 button{padding:12px 16px;border:none;border-radius:10px;background:#3b82f6;color:#fff;font-weight:600;cursor:pointer}
-.result{margin-top:16px;padding:14px;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
+.result{margin-top:16px;padding:14px;background:#fff;border-radius:12px;border:1px solid #e5e7eb;white-space:pre-wrap}
 .back{margin-bottom:16px;display:inline-block;color:#3b82f6;text-decoration:none;font-weight:600}
+.user{font-size:13px;color:#6b7280;margin-bottom:10px}
 </style>
 </head>
 <body>
 
 <div class="container">
   <a class="back" href="index.html">← Back to Dashboard</a>
+
+  <div class="user" id="userStatus">Not logged in</div>
 
   <h1>🤖 AI Content Generator</h1>
   <p>Enter your topic and get captions, hooks, or ideas.</p>
@@ -30,7 +33,9 @@ button{padding:12px 16px;border:none;border-radius:10px;background:#3b82f6;color
 </div>
 
 <script>
-function generate() {
+let currentUser = null;
+
+async function generate() {
   const text = document.getElementById("prompt").value.trim();
   if (!text) {
     alert("Enter a topic first!");
@@ -47,14 +52,21 @@ function generate() {
   document.getElementById("result").innerText =
     "AI Suggestions for: " + text + "\n\n" + outputs.join("\n");
 
-  // analytics count (keeps your analytics.html increasing)
+  // Local analytics (your analytics.html)
   localStorage.setItem("ai_uses", (Number(localStorage.getItem("ai_uses")) || 0) + 1);
+
+  // Firebase analytics (per user)
+  if (currentUser && window.firebase) {
+    const ref = window.firebase.doc(window.firebase.db, "users", currentUser.uid);
+    await window.firebase.setDoc(ref, { ai_uses: window.firebase.increment(1) }, { merge: true });
+  }
 }
 </script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -68,12 +80,22 @@ function generate() {
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  getAnalytics(app);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  window.firebase = { auth, db, doc, setDoc, getDoc, updateDoc, increment, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut };
+  window.firebase = { db, doc, setDoc, getDoc, updateDoc, increment };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      document.getElementById("userStatus").innerText = "Logged in: " + user.email;
+    } else {
+      currentUser = null;
+      document.getElementById("userStatus").innerText = "Not logged in";
+    }
+  });
 </script>
-  
+
 </body>
 </html>
