@@ -116,6 +116,20 @@
       };
       window.location.href = routes[tool] || "index.html";
     }
- 
+ <script src="firebase.js" type="module"></script>
+
+<script>
+  firebaseApp.onAuthStateChanged(firebaseApp.auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  });
+
+  function logout(){
+    firebaseApp.signOut(firebaseApp.auth).then(() => {
+      window.location.href = "login.html";
+    });
+  }
+</script>
 </body>
 </html>
