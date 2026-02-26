@@ -65,6 +65,21 @@
     </div>
   </div>
 
+  <!-- 🔥 Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- 🔐 Auth Guard -->
+  <script type="module">
+    const { auth, onAuthStateChanged } = window.firebaseApp;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+
+  <!-- Your Original Logic -->
   <script>
     const K = {
       keys: "ig_keywords",
@@ -105,12 +120,10 @@
         return;
       }
 
-      // Save lead
       const leads = JSON.parse(localStorage.getItem(K.leads) || "[]");
       leads.push({ user, comment, time: new Date().toLocaleString() });
       localStorage.setItem(K.leads, JSON.stringify(leads));
 
-      // Analytics
       inc(K.clicks);
 
       document.getElementById("result").innerHTML =
@@ -131,7 +144,6 @@
         .join("<br>");
     }
 
-    // Load saved config
     document.getElementById("keywords").value = localStorage.getItem(K.keys) || "";
     document.getElementById("message").value = localStorage.getItem(K.msg) || "";
     renderLeads();
