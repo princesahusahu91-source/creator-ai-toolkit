@@ -103,6 +103,7 @@
     <footer>© 2026 Creator AI Toolkit</footer>
   </div>
 
+  <!-- Routes -->
   <script>
     function openTool(tool){
       const routes = {
@@ -116,20 +117,25 @@
       };
       window.location.href = routes[tool] || "index.html";
     }
- <script src="firebase.js" type="module"></script>
+  </script>
 
-<script>
-  firebaseApp.onAuthStateChanged(firebaseApp.auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  });
+  <!-- Firebase -->
+  <script src="firebase.js" type="module"></script>
 
-  function logout(){
-    firebaseApp.signOut(firebaseApp.auth).then(() => {
-      window.location.href = "login.html";
+  <!-- Auth Guard -->
+  <script type="module">
+    firebaseApp.onAuthStateChanged(firebaseApp.auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
     });
-  }
-</script>
+
+    window.logout = function(){
+      firebaseApp.signOut(firebaseApp.auth).then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+
 </body>
 </html>
