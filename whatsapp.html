@@ -78,8 +78,24 @@
     <button id="openBtn" style="display:none;" onclick="openWhatsApp()">Open WhatsApp Link</button>
   </div>
 
-  <script>
-    function saveAndGenerate(){
+  <!-- 🔥 Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- 🔐 Auth Guard + Analytics -->
+  <script type="module">
+    const { auth, onAuthStateChanged, db, doc, setDoc, increment } = window.firebaseApp;
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+      }
+    });
+
+    window.saveAndGenerate = function(){
       const num = document.getElementById("waNumber").value.trim();
       const msg = document.getElementById("waMsg").value.trim();
 
@@ -98,22 +114,28 @@
         "<b>Your Auto-Reply Link:</b><br>" + link;
 
       document.getElementById("openBtn").style.display = "block";
-    }
+    };
 
-    function openWhatsApp(){
-      // Analytics tracking
+    window.openWhatsApp = async function(){
+      // Local analytics
       localStorage.setItem(
         "whatsapp_clicks",
         Number(localStorage.getItem("whatsapp_clicks") || 0) + 1
       );
+
+      // Firebase analytics per user
+      if (currentUser) {
+        const ref = doc(db, "users", currentUser.uid);
+        await setDoc(ref, { whatsapp_clicks: increment(1) }, { merge: true });
+      }
 
       const num = localStorage.getItem("wa_number");
       const msg = localStorage.getItem("wa_msg");
 
       const link = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
       window.open(link, "_blank");
-    }
+    };
   </script>
 
 </body>
-  </html>
+</html>
