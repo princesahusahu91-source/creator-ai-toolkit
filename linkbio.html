@@ -25,6 +25,21 @@
     </div>
   </div>
 
+  <!-- 🔥 Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- 🔐 Auth Guard -->
+  <script type="module">
+    const { auth, onAuthStateChanged } = window.firebaseApp;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+
+  <!-- Your Original Logic -->
   <script>
     function inc(key){
       const v = Number(localStorage.getItem(key) || 0) + 1;
@@ -38,5 +53,6 @@
     function trackClick(){
       inc("product_clicks");
     }
+  </script>
 </body>
 </html>
