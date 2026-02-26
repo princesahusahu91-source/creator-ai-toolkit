@@ -54,6 +54,46 @@
     </div>
   </div>
 
+  <!-- 🔥 Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- 🔐 Auth Guard -->
+  <script type="module">
+    const { auth, onAuthStateChanged } = window.firebaseApp;
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
   </script>
+
+  <!-- Demo Logic -->
+  <script>
+    let emails = [];
+
+    function addEmail(){
+      const input = document.getElementById("emailInput");
+      const email = input.value.trim();
+      if(!email) return alert("Enter email");
+
+      emails.push(email);
+      input.value = "";
+      render();
+    }
+
+    function sendBroadcast(){
+      if(emails.length === 0) return alert("No subscribers");
+      document.getElementById("status").innerText = "Broadcast sent to " + emails.length + " emails (demo).";
+    }
+
+    function render(){
+      document.getElementById("count").innerText = emails.length;
+      document.getElementById("list").innerHTML = emails.map(e => 
+        `<div class="email-item">${e}</div>`
+      ).join("");
+    }
+  </script>
+
 </body>
-</html>
+  </html>
