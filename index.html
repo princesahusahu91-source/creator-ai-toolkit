@@ -117,9 +117,12 @@
     }
   </script>
 
-  <!-- Auth Guard (Step 3 - FIXED) -->
+  <!-- Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- Auth Guard -->
   <script type="module">
-    import { auth, onAuthStateChanged, signOut } from "./firebase.js";
+    const { auth, onAuthStateChanged, signOut } = window.firebaseApp;
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -127,10 +130,13 @@
       }
     });
 
-    window.logout = function(){
-      signOut(auth).then(() => {
+    window.logout = async function(){
+      try {
+        await signOut(auth);
         window.location.href = "login.html";
-      });
+      } catch (e) {
+        alert("Logout failed: " + e.message);
+      }
     };
   </script>
 
