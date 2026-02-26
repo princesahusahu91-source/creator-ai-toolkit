@@ -54,7 +54,6 @@
     </div>
 
     <div class="grid">
-
       <div class="card" onclick="openTool('linkbio')">
         <div class="icon">🔗</div>
         <h3>Link-in-Bio Store</h3>
@@ -97,7 +96,6 @@
         <h3>Analytics</h3>
         <p>Track usage of your tools.</p>
       </div>
-
     </div>
 
     <footer>© 2026 Creator AI Toolkit</footer>
@@ -119,22 +117,21 @@
     }
   </script>
 
-  <!-- Firebase -->
-  <script src="firebase.js" type="module"></script>
-
-  <!-- Auth Guard -->
+  <!-- Auth Guard (Step 3 - FIXED) -->
   <script type="module">
-    firebaseApp.onAuthStateChanged(firebaseApp.auth, (user) => {
+    import { auth, onAuthStateChanged, signOut } from "./firebase.js";
+
+    onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "login.html";
       }
     });
 
     window.logout = function(){
-      firebaseApp.signOut(firebaseApp.auth).then(() => {
+      signOut(auth).then(() => {
         window.location.href = "login.html";
       });
-    }
+    };
   </script>
 
 </body>
