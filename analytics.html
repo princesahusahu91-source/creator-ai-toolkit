@@ -29,7 +29,7 @@
 <body>
   <div class="container">
     <h1>📊 Analytics</h1>
-    <div class="user" id="userStatus">Not logged in</div>
+    <div class="user" id="userStatus">Checking login...</div>
 
     <div class="grid">
       <div class="card">
@@ -67,33 +67,83 @@
     <button class="btn" onclick="resetStats()">Reset Analytics</button>
   </div>
 
-  <script>
-    function get(key){ 
+  <!-- Firebase -->
+  <script src="firebase.js" type="module"></script>
+
+  <!-- Auth + Stats -->
+  <script type="module">
+    const { auth, onAuthStateChanged, db, doc, getDoc, setDoc } = window.firebaseApp;
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+        document.getElementById("userStatus").innerText =
+          "Logged in as: " + user.email;
+
+        await refreshStats();
+      }
+    });
+
+    function getLocal(key){ 
       return Number(localStorage.getItem(key) || 0); 
     }
 
-    function refreshStats(){
-      document.getElementById("views").innerText = get("bio_views");
-      document.getElementById("clicks").innerText = get("product_clicks");
-      document.getElementById("conversions").innerText = get("conversions");
-      document.getElementById("wa").innerText = get("whatsapp_clicks");
-      document.getElementById("emails").innerText = get("email_subscribers");
-      document.getElementById("ig").innerText = get("instagram_clicks");
-    }
+    window.refreshStats = async function(){
+      if (!currentUser) return;
 
-    refreshStats();
+      const ref = doc(db, "users", currentUser.uid);
+      const snap = await getDoc(ref);
+      const data = snap.exists() ? snap.data() : {};
 
-    function resetStats(){
-      if(confirm("Reset all analytics?")){
-        localStorage.removeItem("bio_views");
-        localStorage.removeItem("product_clicks");
-        localStorage.removeItem("conversions");
-        localStorage.removeItem("whatsapp_clicks");
-        localStorage.removeItem("email_subscribers");
-        localStorage.removeItem("instagram_clicks");
-        refreshStats();
+      document.getElementById("views").innerText =
+        data.bio_views ?? getLocal("bio_views");
+
+      document.getElementById("clicks").innerText =
+        data.product_clicks ?? getLocal("product_clicks");
+
+      document.getElementById("conversions").innerText =
+        data.conversions ?? getLocal("conversions");
+
+      document.getElementById("wa").innerText =
+        data.whatsapp_clicks ?? getLocal("whatsapp_clicks");
+
+      document.getElementById("emails").innerText =
+        data.email_subscribers ?? getLocal("email_subscribers");
+
+      document.getElementById("ig").innerText =
+        data.instagram_clicks ?? getLocal("instagram_clicks");
+    };
+
+    window.resetStats = async function(){
+      if(!confirm("Reset all analytics?")) return;
+
+      // reset local
+      localStorage.removeItem("bio_views");
+      localStorage.removeItem("product_clicks");
+      localStorage.removeItem("conversions");
+      localStorage.removeItem("whatsapp_clicks");
+      localStorage.removeItem("email_subscribers");
+      localStorage.removeItem("instagram_clicks");
+
+      // reset firebase
+      if (currentUser) {
+        const ref = doc(db, "users", currentUser.uid);
+        await setDoc(ref, {
+          bio_views: 0,
+          product_clicks: 0,
+          conversions: 0,
+          whatsapp_clicks: 0,
+          email_subscribers: 0,
+          instagram_clicks: 0
+        }, { merge: true });
       }
-    }
+
+      refreshStats();
+    };
   </script>
 
 </body>
